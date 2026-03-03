@@ -1,0 +1,18 @@
+[project]
+name = "point24"
+version = "0.1.0"
+description = "calculate 24 with four numbers with braces, add, sub, mul and div."
+authors = [
+    {name = "GGN_2015",email = "neko@jlulug.org"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "sympy"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
