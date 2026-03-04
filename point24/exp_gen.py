@@ -1,11 +1,24 @@
-import sympy
+import pip_pkg_info
 
 import functools
 import random
 import os
+import sys
 DIRNOW = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(DIRNOW, "data")
 TEMP_FILE = os.path.join(DATA_FOLDER, "templates.txt")
+
+@functools.cache
+def act_once():
+    try:
+        import sympy # 试图加载 sympy
+        global A
+        global B
+        global C
+        global D
+        A, B, C, D = sympy.symbols("A B C D")
+    except:
+        sys.stderr.write("WARNING: sympy has not been installed.\n")
 
 # do no need tqdm
 try:
@@ -87,8 +100,6 @@ def solve_exp(exp:str, vector4:list) -> int|float|str:
         ans = "err"
     return ans
 
-A, B, C, D = sympy.symbols("A B C D")
-
 @functools.cache
 def get_sympy_eval(exp:str):
     return eval(exp)
@@ -111,7 +122,10 @@ def check_same(exp1:str, exp2:str) -> bool:
         return False
     exp1_val = get_sympy_eval(exp1)
     exp2_val = get_sympy_eval(exp2)
+
+    import sympy
     diff_expr = sympy.simplify(exp1_val - exp2_val)
+
     return (diff_expr == 0)
 
 def generate_all_exp() -> list[str]:
@@ -132,6 +146,14 @@ def not_in_arr(arr:list[str], exp:str) -> bool:
             return False
     return True
 
+def check_has_sympy() -> bool:
+    try:
+        import sympy
+        has_sympy = True
+    except:
+        has_sympy = False
+    return has_sympy
+
 @functools.cache
 def generate_all_diff_exp() -> list[str]:
     arr = []
@@ -148,6 +170,13 @@ def gen_template_file():
 
     if os.path.isfile(TEMP_FILE):
         return
+
+    if not check_has_sympy():
+        sys.stderr.write("point24: gen_template_file can only work with sympy.")
+        
+        # 保证 sympy 存在
+        pip_pkg_info.install_pkg("sympy")
+    act_once()
 
     with open(TEMP_FILE, "w") as fp:
         for line in generate_all_diff_exp():
