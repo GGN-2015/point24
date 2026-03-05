@@ -1,5 +1,7 @@
-from .main import solve
+from .main import solve, rand_question, game
 
 __all__ = [
-    "solve"
+    "solve",
+    "rand_question",
+    "game"
 ]
