@@ -128,6 +128,45 @@ def check_same(exp1:str, exp2:str) -> bool:
 
     return (diff_expr == 0)
 
+def find_match_brace(exp:str, i:int) -> int:
+    if exp[i] != "(":
+        raise AssertionError()
+    
+    # 寻找匹配括号
+    cnt = 0
+    pos = -1
+    for j in range(i, len(exp)):
+        if exp[j] == "(":
+            cnt += 1
+        elif exp[j] == ")":
+            cnt -= 1
+            if cnt == 0:
+                pos = j
+                break
+    
+    # 没有找到
+    if pos == -1:
+        raise AssertionError()
+    return pos
+
+def simplify_braces(exp:str, begin_pos:int=0) -> str:
+    if exp.find("(") == -1:
+        return exp
+    
+    # 检查每一对括号是否可以去掉
+    i = begin_pos
+    while i < len(exp):
+        if exp[i] == "(": # 检查这个括号是否可以去掉
+            j = find_match_brace(exp, i)
+            new_exp = exp[:i] + exp[i+1:j] + exp[j+1:] # 去掉两个括号后的表达式
+            if check_same(new_exp, exp):
+                exp = new_exp # 这里不可以调整 i, 否则将会跳过字符
+            else:
+                i += 1
+        else:
+            i += 1
+    return exp
+
 def generate_all_exp() -> list[str]:
     all_exp = []
     for base_exp in EXP_TEMPLATES:
@@ -161,7 +200,7 @@ def generate_all_diff_exp() -> list[str]:
     for i in tqdm(range(len(raw_exp_list))):
         exp = raw_exp_list[i]
         if not_in_arr(arr, exp):
-            arr.append(exp)
+            arr.append(simplify_braces(exp))
     return arr
 
 # 创建模板文件

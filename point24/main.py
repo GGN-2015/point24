@@ -3,6 +3,7 @@ try:
 except:
     from exp_gen import get_all_expressions, solve_exp, fill_exp
 
+
 def solve(a:int, b:int, c:int, d:int, ans_aim=24) -> list[str]:
     arr = []
     for line in get_all_expressions():
@@ -10,9 +11,12 @@ def solve(a:int, b:int, c:int, d:int, ans_aim=24) -> list[str]:
         if isinstance(ans_now, str):
             continue
         if abs(ans_now - ans_aim) < 1e-8:
-            arr.append(fill_exp(line, [a, b, c, d]))
-    return arr
+            arr.append(line)
+    return [
+        fill_exp(line, [a, b, c, d])
+        for line in arr
+    ]
 
 if __name__ == "__main__":
-    for line in solve(1, 3, 4, 6):
+    for line in solve(1, 2, 5, 7):
         print(line)
