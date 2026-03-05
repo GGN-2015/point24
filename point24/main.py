@@ -12,11 +12,11 @@ def solve(a:int, b:int, c:int, d:int, ans_aim=24) -> list[str]:
             continue
         if abs(ans_now - ans_aim) < 1e-8:
             arr.append(line)
-    return [
+    return list(set([
         fill_exp(line, [a, b, c, d])
         for line in arr
-    ]
+    ]))
 
 if __name__ == "__main__":
-    for line in solve(1, 2, 5, 7):
+    for line in solve(2, 3, 7, 7):
         print(line)

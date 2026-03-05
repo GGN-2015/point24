@@ -1,6 +1,6 @@
 [project]
 name = "point24"
-version = "0.1.2"
+version = "0.1.3"
 description = "calculate 24 with four numbers with braces, add, sub, mul and div."
 authors = [
     {name = "GGN_2015",email = "neko@jlulug.org"}
